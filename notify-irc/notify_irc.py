@@ -66,11 +66,7 @@ def main():
         connect_factory=irc.connection.AioFactory(ssl=args.ssl),
     )
 
-    try:
-        client.start()
-    finally:
-        client.connection.disconnect()
-        client.reactor.loop.close()
+    client.start()
 
 
 if __name__ == "__main__":
