@@ -1,0 +1,38 @@
+name: 'Notify IRC'
+description: 'Send a notification message to an IRC channel'
+author: 'Andrew Wason'
+inputs:
+  server:
+    description: 'IRC server'
+    default: 'chat.freenode.net'
+    required: true
+  port:
+    description: 'IRC server port'
+    default: 6697
+    required: true
+  channel:
+    description: 'IRC channel to message'
+    required: true
+  channel_key:
+    description: 'IRC channel password'
+    required: false
+  nickname:
+    description: 'IRC user nickname'
+    required: true
+  password:
+    description: 'IRC user password'
+    required: false
+  message:
+    description: 'Message to send'
+    required: true
+  notice:
+    description: 'Use NOTICE instead of PRIVMSG'
+    default: false
+    required: false
+  ssl:
+    description: 'Connect to server using SSL'
+    default: true
+    required: false
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
