@@ -21,10 +21,9 @@ class NotifyIRC(irc.client_aio.AioSimpleIRCClient):
         connection.join(self.channel, self.channel_key)
 
     def on_join(self, connection, event):
-        if self.use_notice:
-            connection.notice(self.channel, self.message)
-        else:
-            connection.privmsg(self.channel, self.message)
+        command = connection.notice if self.use_notice else connection.privmsg
+        for message in self.message.splitlines():
+            command(self.channel, message)
         connection.part([self.channel])
         connection.quit()
 
