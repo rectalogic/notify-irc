@@ -1,48 +1,50 @@
 #! /usr/bin/env python
 
 import sys
-import asyncio
 import argparse
-import ssl
 
-import irc.client
-import irc.client_aio
+import pydle
 
 
-class NotifyIRC(irc.client_aio.AioSimpleIRCClient):
-    def __init__(self, channel, channel_key, message, use_notice=False):
-        super().__init__()
+class NotifyIRC(pydle.Client):
+    def __init__(self, channel, channel_key, notification, use_notice=False, **kwargs):
+        super().__init__(**kwargs)
         self.channel = channel if channel.startswith("#") else f"#{channel}"
         self.channel_key = channel_key
-        self.message = message
+        self.notification = notification
         self.use_notice = use_notice
 
-    def on_welcome(self, connection, event):
-        connection.join(self.channel, self.channel_key)
+    async def on_connect(self):
+        await super().on_connect()
+        await self.join(self.channel, self.channel_key)
 
-    def on_join(self, connection, event):
-        command = connection.notice if self.use_notice else connection.privmsg
-        for message in self.message.splitlines():
-            command(self.channel, message)
-        connection.part([self.channel])
-        connection.quit()
+    async def on_join(self, channel, user):
+        await super().on_join(channel, user)
+        if user != self.nickname:
+            return
+        if self.use_notice:
+            await self.notice(self.channel, self.notification)
+        else:
+            await self.message(self.channel, self.notification)
+        await self.part(self.channel)
 
-    def on_quit(self, connection, event):
-        sys.exit(0)
-
-    def on_disconnect(self, connection, event):
-        sys.exit(1)
+    async def on_part(self, channel, user, message=None):
+        await super().on_part(channel, user, message)
+        await self.quit()
 
 
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--server", default="chat.freenode.net")
     parser.add_argument("-p", "--port", default=6667, type=int)
+    parser.add_argument("--password", default=None, help="Optional server password")
     parser.add_argument("--nickname", default="github-notify")
-    parser.add_argument("--password", default=None, help="Optional nickname password")
+    parser.add_argument(
+        "--sasl-password", help="Nickname password for SASL authentication"
+    )
     parser.add_argument("--channel", required=True, help="IRC #channel")
     parser.add_argument("--channel-key", help="IRC #channel password")
-    parser.add_argument("--ssl", action="store_true")
+    parser.add_argument("--tls", action="store_true")
     parser.add_argument(
         "--notice", action="store_true", help="Use NOTICE instead if PRIVMSG"
     )
@@ -54,18 +56,21 @@ def main():
     args = get_args()
 
     client = NotifyIRC(
-        args.channel, args.channel_key or None, args.message, args.notice
+        channel=args.channel,
+        channel_key=args.channel_key or None,
+        notification=args.message,
+        use_notice=args.notice,
+        nickname=args.nickname,
+        sasl_username=args.nickname,
+        sasl_password=args.sasl_password or None,
     )
-
-    client.connect(
-        args.server,
-        args.port,
-        args.nickname,
+    client.run(
+        hostname=args.server,
+        port=args.port,
         password=args.password or None,
-        connect_factory=irc.connection.AioFactory(ssl=args.ssl),
+        tls=args.tls,
+        tls_verify=args.tls,
     )
-
-    client.start()
 
 
 if __name__ == "__main__":

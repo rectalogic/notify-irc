@@ -1,9 +1,9 @@
 #!/bin/sh
 
-if [ "$INPUT_SSL" == "true" ]; then
-    ARG_SSL="--ssl"
+if [ "$INPUT_TLS" == "true" ]; then
+    ARG_TLS="--tls"
 else
-    ARG_SSL=""
+    ARG_TLS=""
 fi
 if [ "$INPUT_NOTICE" == "true" ]; then
     ARG_NOTICE="--notice"
@@ -13,10 +13,11 @@ fi
 
 exec /notify_irc.py \
     --server "$INPUT_SERVER" \
+    --password "$INPUT_PASSWORD" \
     --port "$INPUT_PORT" \
     --nickname "$INPUT_NICKNAME" \
-    --password "$INPUT_PASSWORD" \
+    --sasl-password "$INPUT_SASL_PASSWORD" \
     --channel "$INPUT_CHANNEL" \
     --channel-key "$INPUT_CHANNEL_KEY" \
     --message "$INPUT_MESSAGE" \
-    $ARG_SSL $ARG_NOTICE
+    $ARG_TLS $ARG_NOTICE

@@ -10,6 +10,9 @@ inputs:
     description: 'IRC server port'
     default: 6697
     required: true
+  password:
+    description: 'IRC server password'
+    required: false
   channel:
     description: 'IRC channel to message'
     required: true
@@ -19,8 +22,8 @@ inputs:
   nickname:
     description: 'IRC user nickname'
     required: true
-  password:
-    description: 'IRC user password'
+  sasl_password:
+    description: 'IRC user SASL password'
     required: false
   message:
     description: 'Message to send'
@@ -29,8 +32,8 @@ inputs:
     description: 'Use NOTICE instead of PRIVMSG'
     default: false
     required: false
-  ssl:
-    description: 'Connect to server using SSL'
+  tls:
+    description: 'Connect to server using TLS'
     default: true
     required: false
 runs:
