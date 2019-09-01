@@ -69,7 +69,8 @@ def main():
         port=args.port,
         password=args.password or None,
         tls=args.tls,
-        tls_verify=args.tls,
+        # https://github.com/Shizmob/pydle/pull/84
+        # tls_verify=args.tls,
     )
 
 

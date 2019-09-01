@@ -1,5 +1,9 @@
 #!/bin/sh
 
+if [ $# -ne 0 ]; then
+    exec /notify_irc.py "$@"
+fi
+
 if [ "$INPUT_TLS" == "true" ]; then
     ARG_TLS="--tls"
 else
