@@ -22,7 +22,7 @@ jobs:
           nickname: my-github-notifier
           message: |
             ${{ github.actor }} pushed ${{ github.event.ref }} ${{ github.event.compare }}
-            ${{ github.event.head_commit.message }}
+            ${{ join(github.event.commits.*.message) }}
       - name: irc pull request
         uses: rectalogic/notify-irc@v1
         if: github.event_name == 'pull_request'
