@@ -61,7 +61,7 @@ def get_args():
     parser.add_argument("--channel-key", help="IRC #channel password")
     parser.add_argument("--tls", action="store_true")
     parser.add_argument(
-        "--notice", action="store_true", help="Use NOTICE instead if PRIVMSG"
+        "--notice", action="store_true", help="Use NOTICE instead of PRIVMSG"
     )
     parser.add_argument("--message", required=True)
     parser.add_argument("--verbose", action="store_true")
