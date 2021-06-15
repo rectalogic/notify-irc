@@ -4,7 +4,7 @@ author: 'Andrew Wason'
 inputs:
   server:
     description: 'IRC server'
-    default: 'chat.freenode.net'
+    default: 'irc.libera.chat'
     required: true
   port:
     description: 'IRC server port'
