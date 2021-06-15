@@ -50,7 +50,7 @@ class NotifyIRC(pydle.Client):
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--server", default="chat.freenode.net")
+    parser.add_argument("--server", default="irc.libera.chat")
     parser.add_argument("-p", "--port", default=6667, type=int)
     parser.add_argument("--password", default=None, help="Optional server password")
     parser.add_argument("--nickname", default="github-notify")
