@@ -36,6 +36,10 @@ inputs:
     description: 'Connect to server using TLS'
     default: true
     required: false
+  verbose:
+    description: 'Enable verbose logging'
+    default: false
+    required: false
 runs:
   using: 'docker'
   image: 'Dockerfile'

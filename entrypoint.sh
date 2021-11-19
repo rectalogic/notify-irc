@@ -14,6 +14,11 @@ if [ "$INPUT_NOTICE" == "true" ]; then
 else
     ARG_NOTICE=""
 fi
+if [ "$INPUT_VERBOSE" == "true" ]; then
+    ARG_VERBOSE="--verbose"
+else
+    ARG_VERBOSE=""
+fi
 
 exec /notify_irc.py \
     --server "$INPUT_SERVER" \
@@ -24,4 +29,4 @@ exec /notify_irc.py \
     --channel "$INPUT_CHANNEL" \
     --channel-key "$INPUT_CHANNEL_KEY" \
     --message "$INPUT_MESSAGE" \
-    $ARG_TLS $ARG_NOTICE
+    $ARG_TLS $ARG_NOTICE $ARG_VERBOSE
